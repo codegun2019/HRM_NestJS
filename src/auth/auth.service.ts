@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '../users/user.entity';
+import { User } from '../entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -20,9 +20,17 @@ export class AuthService {
   }
 
   async login(data: any) {
-    const user = await this.userRepo.findOneBy({ username: data.username });
+    const user = await this.userRepo.findOne({
+      where: { username: data.username },
+      relations: ['role'], // ✅ ต้องดึง role ด้วย
+    });
+  
     if (user && await bcrypt.compare(data.password, user.password)) {
-      const payload = { sub: user.id, username: user.username };
+      const payload = {
+        sub: user.id,
+        username: user.username,
+        role: user.role?.name, // ✅ แนบ role ลงไปใน JWT
+      };
       return { access_token: this.jwtService.sign(payload) };
     }
     return null;
