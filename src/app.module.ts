@@ -1,41 +1,61 @@
+
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AuthController } from './auth/auth.controller';
+import { AuthService } from './auth/auth.service';
+import { JwtStrategy } from './auth/jwt.strategy';
 
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-import { RolesModule } from './roles/roles.module';
-import { PermissionsModule } from './permissions/permissions.module';
+import { UsersController } from './users/users.controller';
+import { UsersService } from './users/users.service';
+import { User } from './users/user.entity';
+
+import { RolesController } from './roles/roles.controller';
+import { RolesService } from './roles/roles.service';
+import { Role } from './roles/role.entity';
+
+import { PermissionsController } from './permissions/permissions.controller';
+import { PermissionsService } from './permissions/permissions.service';
+import { Permission } from './permissions/permission.entity';
+
+import { DashboardController } from './dashboard/dashboard.controller';
+import { DashboardService } from './dashboard/dashboard.service';
 
 @Module({
   imports: [
-    // ✅ โหลด .env (ใช้ได้ใน process.env)
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
-
-    // ✅ Database connection
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: process.env.DB_HOST || 'localhost',
-      port: parseInt(process.env.DB_PORT || '3306', 10),
-      username: process.env.DB_USER || 'root',
-      password: process.env.DB_PASS || '',
-      database: process.env.DB_NAME || 'hrm_nestjs',
-      autoLoadEntities: true, // สำคัญ ต้องมีเพื่อให้ Entity ทำงาน
-      synchronize: true,      // ⚠️ Dev only
+      host: 'localhost',
+      port: 3306,
+      username: 'root',
+      password: '',
+      database: 'hrm_nestjs',
+      entities: [User, Role, Permission],
+      synchronize: true,
     }),
-
-    // ✅ Feature modules
-    AuthModule,
-    UsersModule,
-    RolesModule,
-    PermissionsModule,
+    TypeOrmModule.forFeature([User]),
+    PassportModule,
+    JwtModule.register({
+      secret: 'secret',
+      signOptions: { expiresIn: '1h' },
+    }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [
+    AuthController,
+    UsersController,
+    RolesController,
+    PermissionsController,
+    DashboardController,
+  ],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    UsersService,
+    RolesService,
+    PermissionsService,
+    DashboardService,
+  ],
 })
 export class AppModule {}

@@ -1,46 +1,27 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Get,
-  Request,
-  UseGuards,
-} from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { JwtAuthGuard } from './auth.guard';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiBearerAuth,
-} from '@nestjs/swagger';
 
-@ApiTags('Auth')
-@Controller('api/auth')
+import { Controller, Post, Body, Get, UseGuards, Request } from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { AuthGuard } from '@nestjs/passport';
+
+@Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @ApiOperation({ summary: 'Login to system' })
-  @ApiResponse({ status: 200, description: 'JWT token returned' })
-  @Post('login')
-  async login(
-    @Body() body: { username: string; password: string },
-  ): Promise<{ access_token: string }> {
-    const user = await this.authService.validateUser(
-      body.username,
-      body.password,
-    );
-    if (!user) {
-      throw new Error('Invalid credentials');
-    }
-    return this.authService.login(user);
+  @Post('register')
+  register(@Body() body: any) {
+    return this.authService.register(body);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get current user info' })
+  @Post('login')
+  async login(@Body() body: any) {
+    const token = await this.authService.login(body);
+    if (!token) throw new Error('Invalid credentials');
+    return token;
+  }
+
+  @UseGuards(AuthGuard('jwt'))
   @Get('me')
-  async getProfile(@Request() req) {
+  getMe(@Request() req) {
     return req.user;
   }
 }
