@@ -1,5 +1,5 @@
 
-import { Controller, Post, Body, Get, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Body, Get, UseGuards, Request  } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -13,15 +13,15 @@ export class AuthController {
   }
 
   @Post('login')
-  async login(@Body() body: any) {
-    const token = await this.authService.login(body);
-    if (!token) throw new Error('Invalid credentials');
-    return token;
+  async login(@Body() body) {
+    return this.authService.login(body); // 👈 ไม่ต้อง if แล้ว
   }
+  
 
   @UseGuards(AuthGuard('jwt'))
   @Get('me')
   getMe(@Request() req) {
-    return req.user;
+    return req.user; // ✅ มาจาก validate() ของ JwtStrategy
   }
+
 }
