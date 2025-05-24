@@ -36,7 +36,7 @@ import { RolesGuard } from './common/guards/roles.guard';
       password: '',
       database: 'hrm_nestjs',
       entities: [User, Role, Permission, RolePermission],
-      synchronize: true,
+      synchronize: false, // ❌ ปิดการ sync schema อัตโนมัติ
     }),
     TypeOrmModule.forFeature([User, Role, Permission, RolePermission]),
     PassportModule,

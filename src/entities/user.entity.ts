@@ -1,4 +1,3 @@
-
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -23,6 +22,10 @@ export class User {
 
   @Column()
   password: string;
+
+  // ✅ ต้องมี Column สำหรับ FK
+  @Column()
+  role_id: number;
 
   @ManyToOne(() => Role, role => role.users)
   @JoinColumn({ name: 'role_id' })
