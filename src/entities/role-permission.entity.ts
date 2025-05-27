@@ -15,8 +15,8 @@ export class RolePermission {
   created_at: Date;
 
   @ManyToOne(() => Role, role => role.rolePermissions, { onDelete: 'CASCADE' })
-  role: Role;
+  role: Role
 
   @ManyToOne(() => Permission, permission => permission.rolePermissions, { onDelete: 'CASCADE' })
-  permission: Permission;
+  permission: Permission
 }
