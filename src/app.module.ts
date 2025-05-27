@@ -25,6 +25,15 @@ import { DashboardController } from './dashboard/dashboard.controller';
 import { DashboardService } from './dashboard/dashboard.service';
 
 import { RolesGuard } from './common/guards/roles.guard';
+import { DepartmentsModule } from './departments/departments.module';
+import { PositionsModule } from './positions/positions.module';
+import { EmployeesModule } from './employees/employees.module';
+import { EmployeeDetailsModule } from './employee-details/employee-details.module';
+import { EmployeeEducationModule } from './employee-education/employee-education.module';
+import { EmployeeWorkHistoryModule } from './employee-work-history/employee-work-history.module';
+import { ShiftsModule } from './shifts/shifts.module';
+import { EmployeeShiftsModule } from './employee-shifts/employee-shifts.module';
+import { AttendanceModule } from './attendance/attendance.module';
 
 @Module({
   imports: [
@@ -44,6 +53,15 @@ import { RolesGuard } from './common/guards/roles.guard';
       secret: 'secret',
       signOptions: { expiresIn: '1h' },
     }),
+    DepartmentsModule,
+    PositionsModule,
+    EmployeesModule,
+    EmployeeDetailsModule,
+    EmployeeEducationModule,
+    EmployeeWorkHistoryModule,
+    ShiftsModule,
+    EmployeeShiftsModule,
+    AttendanceModule,
   ],
   controllers: [
     AuthController,
