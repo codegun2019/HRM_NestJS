@@ -1,26 +1,37 @@
+// leave-types/leave-types.service.ts
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { LeaveType } from './entities/leave-type.entity';
 import { CreateLeaveTypeDto } from './dto/create-leave-type.dto';
 import { UpdateLeaveTypeDto } from './dto/update-leave-type.dto';
 
 @Injectable()
 export class LeaveTypesService {
-  create(createLeaveTypeDto: CreateLeaveTypeDto) {
-    return 'This action adds a new leaveType';
+  constructor(
+    @InjectRepository(LeaveType)
+    private readonly leaveTypeRepo: Repository<LeaveType>,
+  ) {}
+
+  create(dto: CreateLeaveTypeDto) {
+    const entity = this.leaveTypeRepo.create(dto);
+    return this.leaveTypeRepo.save(entity);
   }
 
   findAll() {
-    return `This action returns all leaveTypes`;
+    return this.leaveTypeRepo.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} leaveType`;
+    return this.leaveTypeRepo.findOneBy({ id });
   }
 
-  update(id: number, updateLeaveTypeDto: UpdateLeaveTypeDto) {
-    return `This action updates a #${id} leaveType`;
+  async update(id: number, dto: UpdateLeaveTypeDto) {
+    await this.leaveTypeRepo.update(id, dto);
+    return this.leaveTypeRepo.findOneBy({ id });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} leaveType`;
+    return this.leaveTypeRepo.delete(id);
   }
 }

@@ -1,3 +1,5 @@
+
+// salary-components/salary-components.controller.ts
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { SalaryComponentsService } from './salary-components.service';
 import { CreateSalaryComponentDto } from './dto/create-salary-component.dto';
@@ -5,30 +7,30 @@ import { UpdateSalaryComponentDto } from './dto/update-salary-component.dto';
 
 @Controller('salary-components')
 export class SalaryComponentsController {
-  constructor(private readonly salaryComponentsService: SalaryComponentsService) {}
+  constructor(private readonly service: SalaryComponentsService) {}
 
   @Post()
-  create(@Body() createSalaryComponentDto: CreateSalaryComponentDto) {
-    return this.salaryComponentsService.create(createSalaryComponentDto);
+  create(@Body() dto: CreateSalaryComponentDto) {
+    return this.service.create(dto);
   }
 
   @Get()
   findAll() {
-    return this.salaryComponentsService.findAll();
+    return this.service.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.salaryComponentsService.findOne(+id);
+    return this.service.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSalaryComponentDto: UpdateSalaryComponentDto) {
-    return this.salaryComponentsService.update(+id, updateSalaryComponentDto);
+  update(@Param('id') id: string, @Body() dto: UpdateSalaryComponentDto) {
+    return this.service.update(+id, dto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.salaryComponentsService.remove(+id);
+    return this.service.remove(+id);
   }
 }
