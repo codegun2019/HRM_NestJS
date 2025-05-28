@@ -1,3 +1,5 @@
+
+// payroll/payroll.controller.ts
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { PayrollService } from './payroll.service';
 import { CreatePayrollDto } from './dto/create-payroll.dto';
@@ -5,30 +7,30 @@ import { UpdatePayrollDto } from './dto/update-payroll.dto';
 
 @Controller('payroll')
 export class PayrollController {
-  constructor(private readonly payrollService: PayrollService) {}
+  constructor(private readonly service: PayrollService) {}
 
   @Post()
-  create(@Body() createPayrollDto: CreatePayrollDto) {
-    return this.payrollService.create(createPayrollDto);
+  create(@Body() dto: CreatePayrollDto) {
+    return this.service.create(dto);
   }
 
   @Get()
   findAll() {
-    return this.payrollService.findAll();
+    return this.service.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.payrollService.findOne(+id);
+    return this.service.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePayrollDto: UpdatePayrollDto) {
-    return this.payrollService.update(+id, updatePayrollDto);
+  update(@Param('id') id: string, @Body() dto: UpdatePayrollDto) {
+    return this.service.update(+id, dto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.payrollService.remove(+id);
+    return this.service.remove(+id);
   }
 }
