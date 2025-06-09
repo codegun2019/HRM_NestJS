@@ -1,3 +1,5 @@
+
+// payroll-details.controller.ts
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { PayrollDetailsService } from './payroll-details.service';
 import { CreatePayrollDetailDto } from './dto/create-payroll-detail.dto';
@@ -5,30 +7,30 @@ import { UpdatePayrollDetailDto } from './dto/update-payroll-detail.dto';
 
 @Controller('payroll-details')
 export class PayrollDetailsController {
-  constructor(private readonly payrollDetailsService: PayrollDetailsService) {}
+  constructor(private readonly service: PayrollDetailsService) {}
 
   @Post()
-  create(@Body() createPayrollDetailDto: CreatePayrollDetailDto) {
-    return this.payrollDetailsService.create(createPayrollDetailDto);
+  create(@Body() dto: CreatePayrollDetailDto) {
+    return this.service.create(dto);
   }
 
   @Get()
   findAll() {
-    return this.payrollDetailsService.findAll();
+    return this.service.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.payrollDetailsService.findOne(+id);
+    return this.service.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePayrollDetailDto: UpdatePayrollDetailDto) {
-    return this.payrollDetailsService.update(+id, updatePayrollDetailDto);
+  update(@Param('id') id: string, @Body() dto: UpdatePayrollDetailDto) {
+    return this.service.update(+id, dto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.payrollDetailsService.remove(+id);
+    return this.service.remove(+id);
   }
 }

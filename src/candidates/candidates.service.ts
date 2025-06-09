@@ -1,26 +1,37 @@
+
+// candidates.service.ts
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Candidate } from './entities/candidate.entity';
 import { CreateCandidateDto } from './dto/create-candidate.dto';
 import { UpdateCandidateDto } from './dto/update-candidate.dto';
 
 @Injectable()
 export class CandidatesService {
-  create(createCandidateDto: CreateCandidateDto) {
-    return 'This action adds a new candidate';
+  constructor(
+    @InjectRepository(Candidate)
+    private repo: Repository<Candidate>
+  ) {}
+
+  create(dto: CreateCandidateDto) {
+    const candidate = this.repo.create(dto);
+    return this.repo.save(candidate);
   }
 
   findAll() {
-    return `This action returns all candidates`;
+    return this.repo.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} candidate`;
+    return this.repo.findOneBy({ id });
   }
 
-  update(id: number, updateCandidateDto: UpdateCandidateDto) {
-    return `This action updates a #${id} candidate`;
+  update(id: number, dto: UpdateCandidateDto) {
+    return this.repo.update(id, dto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} candidate`;
+    return this.repo.delete(id);
   }
 }

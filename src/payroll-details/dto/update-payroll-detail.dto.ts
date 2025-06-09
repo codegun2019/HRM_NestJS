@@ -1,4 +1,6 @@
-import { PartialType } from '@nestjs/swagger';
+
+// update-payroll-detail.dto.ts
+import { PartialType } from '@nestjs/mapped-types';
 import { CreatePayrollDetailDto } from './create-payroll-detail.dto';
 
 export class UpdatePayrollDetailDto extends PartialType(CreatePayrollDetailDto) {}
